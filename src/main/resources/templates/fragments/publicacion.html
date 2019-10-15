@@ -1,0 +1,77 @@
+<div th:fragment="publicacion(name,allProduct)" class="contenedor-general">
+
+  <a href="#" th:text="${name}" onclick="abrirCerrarElementos(event)" class="abrecierra_element_link"/>
+  <span th:text="' (' + ${allProduct.size() + ')'}" class="abrecierra_element_contador"></span>
+
+  <div th:id="${name}">
+	  <div th:each="prod: ${allProduct}">
+	    <table th:id="${prod.getUuid()}" th:class="${prod.estado.tipo} + ' table_element table '">
+		  <tr>
+		    <td rowspan="7">
+				<img th:src="${prod.img}" width="200" height="140">
+			</td>
+		  </tr>
+		  <tr>
+		  	<td width="100%">
+				<a th:href="${prod.link}" th:text="${prod.descripcion}" target="_blank">xxx</a>
+				<span th:text="' ('+${prod.host}+')'" class="text-bold">xxx<span>
+		  	</td>
+		  </tr>
+		  <tr>
+		    <td>
+				<span class="text-bold">Ubicacion:</span>
+				<span th:text="${prod.getUbicacion()}"></span>
+			</td>
+		  </tr>
+		  <tr>
+		    <td>
+				<span class="text-bold">M2: </span>
+				<span th:text="${prod.m2}"></span>
+				<span class="text-bold"> - Ambientes: </span>
+				<span th:text="${prod.ambientes}"></span>
+			</td>
+		  </tr>
+		  <tr>
+		    <td>
+				<span class="text-bold">Precio: </span>
+				<span th:text="${prod.precio.tipoMoneda}"></span>
+				<span th:text="${prod.precio.valor}"></span>
+				<span th:class="${(prod.porcentajeAumentoPrecio() > 0 ? 'precio_aumento' : 'precio_bajo') + ' tooltip'}" th:utext="${prod.porcentajeAumentoPrecio() == 0 ? '' : ' (' + #numbers.formatDecimal(prod.porcentajeAumentoPrecio(), 0, 'COMMA', 2, 'POINT') + '%)'+'<span class=&quot;tooltiptext&quot;>' + prod.precioAnterior.tipoMoneda + prod.precioAnterior.valor +'</span>'}">xxx</span>
+			</td>
+		  </tr>
+		  <tr>
+		    <td>
+				<span class="tooltip" th:utext="'Registrado hace ' + ${prod.diasDesdeFechaCreacion()} + ' dias'+'<span class=&quot;tooltiptext&quot;>'+ 'Fecha creacion: ' + ${#dates.format(prod.fechaCreacion, 'dd/MM/yyyy HH:mm')} +'</span>'"></span>
+			</td>
+		  </tr>
+		  <tr>
+		  	<td>
+	
+				<table th:class="'table_combo_note ' + ${prod.estado.tipo}">
+					<tr>
+					    <td>
+						  	<form method="POST">
+								<select name="status" onchange="sumbitCombo(event)" class="select-estado">
+								  <option value="nuevo" th:selected="${prod.estado.tipo == 'nuevo'} ? 'true' : 'false'">Nuevo</option>
+								  <option value="enproceso" th:selected="${prod.estado.tipo == 'enproceso'} ? 'true' : 'false'">En Proceso</option>
+								  <option value="candidato" th:selected="${prod.estado.tipo == 'candidato'} ? 'true' : 'false'">Candidato</option>
+								  <option value="descartado" th:selected="${prod.estado.tipo == 'descartado'} ? 'true' : 'false'">Descartado</option>
+								</select>
+							</form>
+					    </td>
+					    <td>
+							<button th:class="${(prod.existeNota() ? '' : 'existenota') + ' boton-modal'}" onclick="btnModalClick(event)" >Nota</button>
+					    </td>
+					</tr>
+				</table>
+				
+			</td>
+		  </tr>
+	    </table>
+	    
+	    </br>
+	    
+	  </div>
+  </div>
+
+</div>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="    
+    	http://www.springframework.org/schema/beans      
+    	http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="estadoDAO" class="org.q3s.qprops.dao.EstadoDAOBean"/>
+	<bean id="filtroDAO" class="org.q3s.qprops.dao.FiltroDAOBean"/>
+	<bean id="publicacionDAO" class="org.q3s.qprops.dao.PublicacionDAOBean"/>
+	<bean id="paginaParserDAO" class="org.q3s.qprops.dao.PaginaParserDAOBean"/>
+	
+	<bean id="propService" class="org.q3s.qprops.services.PropServiceBean">
+		<property name="estadoDAO" ref="estadoDAO"/>
+		<property name="filtroDAO" ref="filtroDAO"/>
+		<property name="publicacionDAO" ref="publicacionDAO"/>
+		<property name="paginaParserDAO" ref="paginaParserDAO"/>
+	</bean>
+
+	<bean id="bateriaService" class="org.q3s.qprops.services.BateriaServiceBean"/>
+
+</beans>
