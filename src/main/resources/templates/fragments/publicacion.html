@@ -8,7 +8,7 @@
 	    <table th:id="${prod.getUuid()}" th:class="${prod.estado.tipo} + ' table_element table '">
 		  <tr>
 		    <td rowspan="7">
-				<img th:src="${prod.img}" width="200" height="140">
+				<img class="lazy" th:data-src="${prod.img}" loading="lazy" width="200" height="140">
 			</td>
 		  </tr>
 		  <tr>
