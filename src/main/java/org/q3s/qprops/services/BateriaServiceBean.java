@@ -29,8 +29,6 @@ public class BateriaServiceBean implements BateriaService {
 		
 		processBuilder.command("bash", "-c", String.format(command, num));
 		
-		LoggerUtils.info("# Estado de bateria:", processBuilder.command());
-
 		try {
 
 			Process process = processBuilder.start();

@@ -26,7 +26,7 @@ public class PublicacionController {
 	private BateriaService bateriaService;
 	
 	@RequestMapping("/")
-	public String index(@RequestParam(required = false, value = "orden") String orden, Model modelo) {
+	public String index(@RequestParam(required = false, value = "orden",  defaultValue = "fechaRegistracion") String orden, Model modelo) {
 		
 		List<Publicacion> publicaciones = service.findAll();
 		
@@ -94,6 +94,8 @@ public class PublicacionController {
 			publicaciones.sort(Comparator.comparing(Publicacion::getM2,Comparator.nullsLast(Comparator.reverseOrder())).thenComparing(Publicacion::calcularPrecio));
 		}else if("ambientes".equalsIgnoreCase(orden)) {
 			publicaciones.sort(Comparator.comparing(Publicacion::getAmbientes,Comparator.nullsLast(Comparator.reverseOrder())).thenComparing(Publicacion::calcularPrecio));
+		}else{
+			publicaciones.sort(Comparator.comparing(Publicacion::getFechaCreacion,Comparator.nullsFirst(Comparator.reverseOrder())).thenComparing(Publicacion::calcularPrecio));
 		}
 		return publicaciones;
 	}

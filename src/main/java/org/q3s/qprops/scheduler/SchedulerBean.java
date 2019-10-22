@@ -16,7 +16,7 @@ public class SchedulerBean {
 	
 	@PostConstruct
 	public void init() throws Exception {
-//		cron();
+		cron();
 	}
 	
 	@Scheduled(cron = "0 30 * * * *")

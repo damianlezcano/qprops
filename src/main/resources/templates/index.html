@@ -26,6 +26,15 @@
      text-align-last: center;
   }
 
+  .orden_publicaciones {
+	font-size: 34px
+  }
+
+  .orden_publicaciones_seleccionado {
+	color: lightsteelblue;
+  }
+
+
 }
 
 
@@ -86,7 +95,6 @@ table, th, td {
 	color: grey;
     font-style: italic;
 }
-
 
 .existenota {
 	background-color: cornflowerblue;
@@ -189,33 +197,33 @@ body {font-family: Arial, Helvetica, sans-serif;}
 	
 		<span class="label">Orden</span> [
 		
-		<span th:switch="${orden}"> 
-		  <span th:case="'precio'">Precio</span> 
-		  <a th:case="*" href="/?orden=precio">Precio</a>
-		</span>
-		| 
-		<span th:switch="${orden}"> 
-		  <span th:case="'descuento'">Descuento</span> 
-		  <a th:case="*" href="/?orden=descuento">Descuento</a>
-		</span>
-		| 
-		<span th:switch="${orden}"> 
-		  <span th:case="'fechaRegistracion'">Fecha Registración</span> 
+		<span th:switch="${orden}" class="orden_publicaciones"> 
+		  <span th:case="'fechaRegistracion'" class="orden_publicaciones_seleccionado">Fecha Registración</span> 
 		  <a th:case="*" href="/?orden=fechaRegistracion">Fecha Registración</a>
 		</span>
 		| 
-		<span th:switch="${orden}"> 
-		  <span th:case="'ubicacion'">Ubicacion</span> 
+		<span th:switch="${orden}" class="orden_publicaciones"> 
+		  <span th:case="'ubicacion'" class="orden_publicaciones_seleccionado">Ubicacion</span> 
 		  <a th:case="*" href="/?orden=ubicacion">Ubicacion</a>
 		</span>
 		| 
-		<span th:switch="${orden}"> 
-		  <span th:case="'m2'">M2</span> 
+		<span th:switch="${orden}" class="orden_publicaciones"> 
+		  <span th:case="'precio'" class="orden_publicaciones_seleccionado">Precio</span> 
+		  <a th:case="*" href="/?orden=precio">Precio</a>
+		</span>
+		| 
+		<span th:switch="${orden}" class="orden_publicaciones"> 
+		  <span th:case="'descuento'" class="orden_publicaciones_seleccionado">Descuento</span> 
+		  <a th:case="*" href="/?orden=descuento">Descuento</a>
+		</span>
+		| 
+		<span th:switch="${orden}" class="orden_publicaciones"> 
+		  <span th:case="'m2'" class="orden_publicaciones_seleccionado">M2</span> 
 		  <a th:case="*" href="/?orden=m2">M2</a>
 		</span>
 		| 
-		<span th:switch="${orden}"> 
-		  <span th:case="'ambientes'">Ambientes</span> 
+		<span th:switch="${orden}" class="orden_publicaciones"> 
+		  <span th:case="'ambientes'" class="orden_publicaciones_seleccionado">Ambientes</span> 
 		  <a th:case="*" href="/?orden=ambientes">Ambientes</a>
 		</span>
 		]
