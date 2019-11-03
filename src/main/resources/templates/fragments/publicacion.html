@@ -14,7 +14,7 @@
 		  <tr>
 		  	<td width="100%">
 				<a th:href="${prod.link}" th:text="${prod.descripcion}" target="_blank">xxx</a>
-				<span th:text="' ('+${prod.host}+')'" class="text-bold">xxx<span>
+				<span th:text="' ('+${prod.paginaParser}+')'" class="text-bold">xxx<span>
 		  	</td>
 		  </tr>
 		  <tr>
@@ -51,11 +51,19 @@
 					<tr>
 					    <td>
 						  	<form method="POST">
-								<select name="status" onchange="sumbitCombo(event)" class="select-estado">
+								<select name="status" onchange="sumbitCombo(event)" class="select-estado" th:borrar="${prod.estado.tipo}">
 								  <option value="nuevo" th:selected="${prod.estado.tipo == 'nuevo'} ? 'true' : 'false'">Nuevo</option>
 								  <option value="enproceso" th:selected="${prod.estado.tipo == 'enproceso'} ? 'true' : 'false'">En Proceso</option>
 								  <option value="candidato" th:selected="${prod.estado.tipo == 'candidato'} ? 'true' : 'false'">Candidato</option>
-								  <option value="descartado" th:selected="${prod.estado.tipo == 'descartado'} ? 'true' : 'false'">Descartado</option>
+						
+								  <option th:if="${prod.estado.tipo == 'nuevo' || prod.estado.tipo == null}" value="descartado" th:selected="${prod.estado.tipo == 'descartado'} ? 'true' : 'false'">Descartado</option>
+								  <option th:if="${prod.estado.tipo == 'enproceso'}" value="descartadoDesdeEnProceso">Descartado</option>
+								  <option th:if="${prod.estado.tipo == 'candidato'}" value="descartadoDesdeCandidato">Descartado</option>
+								  
+								  <option th:if="${prod.estado.tipo == 'descartado'}" value="descartado" th:selected="${prod.estado.tipo == 'descartado'} ? 'true' : 'false'">Descartado</option>
+								  <option th:if="${prod.estado.tipo == 'descartadoDesdeEnProceso'}" value="descartadoDesdeEnProceso" th:selected="${prod.estado.tipo == 'descartadoDesdeEnProceso'} ? 'true' : 'false'">Descartado</option>
+								  <option th:if="${prod.estado.tipo == 'descartadoDesdeCandidato'}" value="descartadoDesdeCandidato" th:selected="${prod.estado.tipo == 'descartadoDesdeCandidato'} ? 'true' : 'false'">Descartado</option>
+						
 								</select>
 							</form>
 					    </td>

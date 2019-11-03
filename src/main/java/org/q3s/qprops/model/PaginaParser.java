@@ -6,18 +6,16 @@ public class PaginaParser implements Serializable {
 
 	private static final long serialVersionUID = -526854602934646523L;
 	
+	private int id;
 	private String pagina;
 	private String parser;
-	private String tipoBusqueda;
+	private String descripcion;
 	
-	public PaginaParser(String pagina, String parser) {
+	public PaginaParser(int id, String pagina, String parser,String descripcion) {
+		this.id = id;
 		this.pagina = pagina;
 		this.parser = parser;
-	}
-	public PaginaParser(String pagina, String parser,String tipoBusqueda) {
-		this.pagina = pagina;
-		this.parser = parser;
-		this.setTipoBusqueda(tipoBusqueda);
+		this.descripcion = descripcion;
 	}
 	public String getPagina() {
 		return pagina;
@@ -31,11 +29,21 @@ public class PaginaParser implements Serializable {
 	public void setParser(String parser) {
 		this.parser = parser;
 	}
-	public String getTipoBusqueda() {
-		return tipoBusqueda;
+	public int getId() {
+		return id;
 	}
-	public void setTipoBusqueda(String tipoBusqueda) {
-		this.tipoBusqueda = tipoBusqueda;
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getDescripcion() {
+		return descripcion;
+	}
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+	@Override
+	public String toString() {
+		return descripcion + " / " + parser;
 	}
 	
 }

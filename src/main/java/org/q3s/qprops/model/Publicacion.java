@@ -19,10 +19,12 @@ public class Publicacion implements Serializable {
 	private String ciudad;
 	private String link;
 	private String img;
-	private String host;
 	private Estado estado;
 	private Date fechaCreacion;
 
+	private PaginaParser paginaParser;
+	private int paginaParserId;
+	
 	//-------------------------
 
 	//UUID,AMBIENTES,BARRIO,CALLE,CIUDAD,DESCRIPCION,FECHA_CREACION,HOST,IMG,LINK,M2
@@ -31,7 +33,7 @@ public class Publicacion implements Serializable {
 		super();
 	}
 	
-	public Publicacion(String uuid, int ambientes, String barrio, String calle, String ciudad, String descripcion, Date fechaCreacion, String host, String img, String link, int m2, String precioTipoMoneda, double precioValor) {
+	public Publicacion(String uuid, int ambientes, String barrio, String calle, String ciudad, String descripcion, Date fechaCreacion, int paginaParserId, String img, String link, int m2, String precioTipoMoneda, double precioValor) {
 		super();
 		this.uuid = uuid;
 		this.descripcion = descripcion;
@@ -42,8 +44,8 @@ public class Publicacion implements Serializable {
 		this.ciudad = ciudad;
 		this.link = link;
 		this.img = img;
-		this.host = host;
 		this.fechaCreacion = fechaCreacion;
+		this.paginaParserId = paginaParserId;
 		this.precio = new Precio(precioTipoMoneda,precioValor);
 	}	
 	
@@ -152,14 +154,6 @@ public class Publicacion implements Serializable {
 		this.link = link;
 	}
 
-	public String getHost() {
-		return host;
-	}
-
-	public void setHost(String value) {
-		this.host = value;
-	}
-
 	public String getImg() {
 		return img;
 	}
@@ -232,6 +226,22 @@ public class Publicacion implements Serializable {
 	@Override
 	public String toString() {
 		return this.getDescripcion() + getUbicacion();
+	}
+
+	public int getPaginaParserId() {
+		return paginaParserId;
+	}
+
+	public void setPaginaParserId(int paginaParserId) {
+		this.paginaParserId = paginaParserId;
+	}
+
+	public PaginaParser getPaginaParser() {
+		return paginaParser;
+	}
+
+	public void setPaginaParser(PaginaParser paginaParser) {
+		this.paginaParser = paginaParser;
 	}
 
 }

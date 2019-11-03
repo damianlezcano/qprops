@@ -5,13 +5,18 @@ import java.util.List;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.q3s.qprops.model.PaginaParser;
 import org.q3s.qprops.model.Publicacion;
 import org.q3s.qprops.parser.Parser;
 
 public class ParserArgenProp extends Parser {
 
-	public ParserArgenProp(String url) throws Exception {
-		super(url);
+	public ParserArgenProp(PaginaParser pp) throws Exception {
+		super(pp);
+	}
+
+	public ParserArgenProp(String url, PaginaParser pp) {
+		super(url,pp);
 	}
 
 	@Override

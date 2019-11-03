@@ -18,7 +18,7 @@ public class PublicacionDAOBean implements PublicacionDAO {
 	public void save(Publicacion publicacion) {
         jdbcTemplate.update(
                 "insert into PUBLICACION "
-              + "(UUID,AMBIENTES,BARRIO,CALLE,CIUDAD,DESCRIPCION,FECHA_CREACION,HOST,IMG,LINK,M2,PRECIO_TIPO_MONEDA,PRECIO_VALOR) "
+              + "(UUID,AMBIENTES,BARRIO,CALLE,CIUDAD,DESCRIPCION,FECHA_CREACION,PAGINA_PARSER_ID,IMG,LINK,M2,PRECIO_TIPO_MONEDA,PRECIO_VALOR) "
               + "values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
               publicacion.getUuid(),
               publicacion.getAmbientes(),
@@ -27,7 +27,7 @@ public class PublicacionDAOBean implements PublicacionDAO {
               publicacion.getCiudad(),
               publicacion.getDescripcion(),
               publicacion.getFechaCreacion(),
-              publicacion.getHost(),
+              publicacion.getPaginaParserId(),
               publicacion.getImg(),
               publicacion.getLink(),
               publicacion.getM2(),
@@ -38,22 +38,22 @@ public class PublicacionDAOBean implements PublicacionDAO {
 	@Override
 	public List<Publicacion> findAll() {
         return jdbcTemplate.query("select * from PUBLICACION",
-                (rs, rowNum) ->
-                        new Publicacion(
-                                rs.getString("UUID"),
-                                rs.getInt("AMBIENTES"),
-                                rs.getString("BARRIO"),
-                                rs.getString("CALLE"),
-                                rs.getString("CIUDAD"),
-                                rs.getString("DESCRIPCION"),
-                                rs.getDate("FECHA_CREACION"),
-                                rs.getString("HOST"),
-                                rs.getString("IMG"),
-                                rs.getString("LINK"),
-                                rs.getInt("M2"),
-                                rs.getString("PRECIO_TIPO_MONEDA"),
-                                rs.getDouble("PRECIO_VALOR")
-                        )
+            (rs, rowNum) ->
+                new Publicacion(
+                    rs.getString("UUID"),
+                    rs.getInt("AMBIENTES"),
+                    rs.getString("BARRIO"),
+                    rs.getString("CALLE"),
+                    rs.getString("CIUDAD"),
+                    rs.getString("DESCRIPCION"),
+                    rs.getDate("FECHA_CREACION"),
+                    rs.getInt("PAGINA_PARSER_ID"),
+                    rs.getString("IMG"),
+                    rs.getString("LINK"),
+                    rs.getInt("M2"),
+                    rs.getString("PRECIO_TIPO_MONEDA"),
+                    rs.getDouble("PRECIO_VALOR")
+                )
         );
 	}
 
@@ -61,24 +61,24 @@ public class PublicacionDAOBean implements PublicacionDAO {
 	public Publicacion findById(String id) {
 		try {
 			return jdbcTemplate.query(
-					"select * from PUBLICACION where uuid = ?",
-					new Object[]{id}, (rs, rowNum) ->
-					Optional.of(new Publicacion(
-							rs.getString("UUID"),
-							rs.getInt("AMBIENTES"),
-							rs.getString("BARRIO"),
-							rs.getString("CALLE"),
-							rs.getString("CIUDAD"),
-							rs.getString("DESCRIPCION"),
-							rs.getDate("FECHA_CREACION"),
-							rs.getString("HOST"),
-							rs.getString("IMG"),
-							rs.getString("LINK"),
-							rs.getInt("M2"),
-							rs.getString("PRECIO_TIPO_MONEDA"),
-							rs.getDouble("PRECIO_VALOR")
-							))
-					).get(0).get();			
+				"select * from PUBLICACION where uuid = ?",
+				new Object[]{id}, (rs, rowNum) ->
+				Optional.of(new Publicacion(
+					rs.getString("UUID"),
+					rs.getInt("AMBIENTES"),
+					rs.getString("BARRIO"),
+					rs.getString("CALLE"),
+					rs.getString("CIUDAD"),
+					rs.getString("DESCRIPCION"),
+					rs.getDate("FECHA_CREACION"),
+					rs.getInt("PAGINA_PARSER_ID"),
+					rs.getString("IMG"),
+					rs.getString("LINK"),
+					rs.getInt("M2"),
+					rs.getString("PRECIO_TIPO_MONEDA"),
+					rs.getDouble("PRECIO_VALOR")
+					))
+				).get(0).get();			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

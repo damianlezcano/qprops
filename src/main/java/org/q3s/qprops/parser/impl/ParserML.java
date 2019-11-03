@@ -6,14 +6,19 @@ import java.util.List;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.q3s.qprops.model.PaginaParser;
 import org.q3s.qprops.model.Precio;
 import org.q3s.qprops.model.Publicacion;
 import org.q3s.qprops.parser.Parser;
 
 public class ParserML extends Parser {
 
-	public ParserML(String url, String tipoBusqueda) throws Exception {
-		super(url,tipoBusqueda);
+	public ParserML(PaginaParser pp) throws Exception {
+		super(pp);
+	}
+
+	public ParserML(String url, PaginaParser pp) {
+		super(url,pp);
 	}
 
 	@Override
@@ -35,10 +40,9 @@ public class ParserML extends Parser {
 			buildLink(ad,elem);
 			buildPrecio(ad,elem);
 			buildM2Env(ad,elem);
-			
-			ad.setHost(tipoBusqueda + " / " + "mercadolibre");
-			ad.setFechaCreacion(new Date());
-			ad.setUuid(generateUuid(ad));
+			buifFechaCreacion(ad);
+			buildUuid(ad);
+			buildPaginaParser(ad);
 			
 			ads.add(ad);
 		}
@@ -47,11 +51,23 @@ public class ParserML extends Parser {
 		Elements pager = doc.select("div.pagination__container").select("li.andes-pagination__button--next");
 		//hasta no encontrar mas el boton siguiente
 		if(!pager.isEmpty()){
-			Parser parser = new ParserML(pager.select("a.andes-pagination__link").attr("href"), tipoBusqueda);
+			Parser parser = new ParserML(pager.select("a.andes-pagination__link").attr("href"), pp);
 			ads.addAll(parser.getAds());
 		}
 
 		return ads;
+	}
+
+	private void buildPaginaParser(Publicacion ad) {
+		ad.setPaginaParserId(pp.getId());
+	}
+
+	private void buildUuid(Publicacion ad) {
+		ad.setUuid(generateUuid(ad));
+	}
+
+	private void buifFechaCreacion(Publicacion ad) {
+		ad.setFechaCreacion(new Date());
 	}
 
 	private void buildM2Env(Publicacion ad, Element elem) {

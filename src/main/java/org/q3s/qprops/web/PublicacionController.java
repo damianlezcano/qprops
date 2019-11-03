@@ -1,5 +1,8 @@
 package org.q3s.qprops.web;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -42,7 +45,7 @@ public class PublicacionController {
 				enprocesos.add(publicacion);
 			}else if("candidato".equalsIgnoreCase(publicacion.getEstado().getTipo())) {
 				candidatos.add(publicacion);
-			}else if("descartado".equalsIgnoreCase(publicacion.getEstado().getTipo())) {
+			}else if("descartado".equalsIgnoreCase(publicacion.getEstado().getTipo()) || "descartadoDesdeEnProceso".equalsIgnoreCase(publicacion.getEstado().getTipo()) || "descartadoDesdeCandidato".equalsIgnoreCase(publicacion.getEstado().getTipo())) {
 				descartados.add(publicacion);
 			}
 		}
@@ -60,16 +63,17 @@ public class PublicacionController {
 		return "/index";
 	}
 
+	@ResponseBody
 	@RequestMapping(value = "/updateStatus/{id}", method = RequestMethod.POST)
-	public String updateStatus(@PathVariable("id") String id, @RequestParam("status") String estado, @RequestParam(required = false, value = "orden") String orden) {
+	public void updateStatus(@PathVariable("id") String id, @RequestParam("status") String estado) {
 		service.updateStatus(id,estado);
-		return "redirect:/" + (orden == null ? "" : "?orden="+orden);
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/updateNote/{id}", method = RequestMethod.POST)
-	public void updateNote(@PathVariable("id") String id, @RequestParam("note") String nota) {
-		service.updateNote(id,nota);
+	public void updateNote(@PathVariable("id") String id, @RequestParam("note") String nota) throws UnsupportedEncodingException {
+		String idDecode = URLDecoder.decode(id, StandardCharsets.UTF_8.toString());
+		service.updateNote(idDecode,nota);
 	}
 	
 	@ResponseBody

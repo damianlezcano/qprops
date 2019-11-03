@@ -8,6 +8,7 @@ public interface PaginaParserDAO {
 
 	void save(PaginaParser pp);
 
+	PaginaParser findById(int id);
 	List<PaginaParser> findAll();
 
 }

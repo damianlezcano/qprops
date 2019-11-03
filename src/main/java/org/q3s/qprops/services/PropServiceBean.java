@@ -29,11 +29,14 @@ public class PropServiceBean implements PropService {
 
 	@Override
 	public List<Publicacion> findAll() {
+		List<PaginaParser> parsers = paginaParserDAO.findAll();
 		List<Publicacion> nlist = new ArrayList<Publicacion>();
 		List<Publicacion> rlist = publicacionDAO.findAll();
 		LoggerUtils.info("Recuperando %s publicaciones de la base", rlist.size());
 		for (Publicacion p : rlist) {
 			String uuid = p.getUuid();
+			PaginaParser pp = findPaginaParserById(p.getPaginaParserId(),parsers);
+			p.setPaginaParser(pp);
 			Estado e = estadoDAO.findById(uuid);
 			p.setEstado(e);
 			int i = nlist.indexOf(p);
@@ -48,6 +51,15 @@ public class PropServiceBean implements PropService {
 		}
 		LoggerUtils.info("Devolvemos %s publicaciones", nlist.size());
 		return nlist;
+	}
+
+	private PaginaParser findPaginaParserById(int paginaParserId, List<PaginaParser> parsers) {
+		for(PaginaParser pp : parsers) {
+			if(pp.getId() == paginaParserId){
+				return pp;
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -85,11 +97,7 @@ public class PropServiceBean implements PropService {
 	@Override
 	public void process() throws Exception {
 
-		List<Parser> listParser = new ArrayList<Parser>();
-		for (PaginaParser paginaParser : paginaParserDAO.findAll()) {
-			Parser parser = ParserFactoryBean.get(paginaParser);
-			listParser.add(parser);
-		}
+		List<Parser> listParser = cargarListadoDeParser();
 		
 		LoggerUtils.info("[1/5] Se cargaron %s parser", listParser.size());
 		
@@ -100,11 +108,16 @@ public class PropServiceBean implements PropService {
 		LoggerUtils.info("[2/5] Existian %s publicaciones guardadas en la base de datos", publicacionesGuardadas.size());
 		
 		//-------------------------------------------------------------------
-//		List<Publicacion> publicacionesDescargadas = publicacionesGuardadas;
+		
 		List<Publicacion> publicacionesDescargadas = new ArrayList<Publicacion>();
 		for (Parser parser : listParser) {
-			List<Publicacion> list = parser.getAds();
-			publicacionesDescargadas.addAll(list);
+			try {
+				List<Publicacion> list = parser.getAds();
+				LoggerUtils.info("%s -> %s analisadas.",parser.getPaginaParser(),list.size());
+				publicacionesDescargadas.addAll(list);				
+			} catch (Exception e) {
+				LoggerUtils.info("%s -> Error en el análisis: ",parser,e.getMessage());
+			}
 		}
 		
 		LoggerUtils.info("[3/5] Se analizaron %s publicaciones remotas", publicacionesDescargadas.size());
@@ -140,6 +153,16 @@ public class PropServiceBean implements PropService {
 			publicacionDAO.save(publicacion);
 		}
 		
+	}
+
+	private List<Parser> cargarListadoDeParser() throws Exception {
+		List<Parser> listParser = new ArrayList<Parser>();
+		List<PaginaParser> pp = paginaParserDAO.findAll();
+		for (PaginaParser paginaParser : pp) {
+			Parser parser = ParserFactoryBean.get(paginaParser);
+			listParser.add(parser);
+		}
+		return listParser;
 	}
 
 	private Publicacion buscar(Publicacion pf, List<Publicacion> publicacionesGuardadas, List<Publicacion> publicacionesNuevas) {
