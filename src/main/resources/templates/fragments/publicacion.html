@@ -14,7 +14,11 @@
 		  <tr>
 		  	<td width="100%">
 				<a th:href="${prod.link}" th:text="${prod.descripcion}" target="_blank">xxx</a>
-				<span th:text="' ('+${prod.paginaParser}+')'" class="text-bold">xxx<span>
+				<span class="text-bold">
+					<span> (</span>
+					<a href="#" onclick="goto(this)" th:href-data="'tipoBusqueda='+${prod.paginaParser.descripcion}" th:text="${prod.paginaParser.descripcion}"/>
+					<span>)</span>
+				<span>
 		  	</td>
 		  </tr>
 		  <tr>

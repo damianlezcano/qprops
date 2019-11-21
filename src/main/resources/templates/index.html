@@ -207,32 +207,32 @@ body {font-family: Arial, Helvetica, sans-serif;}
 		
 		<span th:switch="${orden}" class="orden_publicaciones"> 
 		  <span th:case="'fechaRegistracion'" class="orden_publicaciones_seleccionado">Fecha Registración</span> 
-		  <a th:case="*" href="/?orden=fechaRegistracion">Fecha Registración</a>
+		  <a th:case="*" href="#" onclick="goto(this)" href-data="orden=fechaRegistracion">Fecha Registración</a>
 		</span>
 		| 
 		<span th:switch="${orden}" class="orden_publicaciones"> 
 		  <span th:case="'ubicacion'" class="orden_publicaciones_seleccionado">Ubicacion</span> 
-		  <a th:case="*" href="/?orden=ubicacion">Ubicacion</a>
+		  <a th:case="*" href="#" onclick="goto(this)" href-data="orden=ubicacion">Ubicacion</a>
 		</span>
 		| 
 		<span th:switch="${orden}" class="orden_publicaciones"> 
 		  <span th:case="'precio'" class="orden_publicaciones_seleccionado">Precio</span> 
-		  <a th:case="*" href="/?orden=precio">Precio</a>
+		  <a th:case="*" href="#" onclick="goto(this)" href-data="orden=precio">Precio</a>
 		</span>
 		| 
 		<span th:switch="${orden}" class="orden_publicaciones"> 
 		  <span th:case="'descuento'" class="orden_publicaciones_seleccionado">Descuento</span> 
-		  <a th:case="*" href="/?orden=descuento">Descuento</a>
+		  <a th:case="*" href="#" onclick="goto(this)" href-data="orden=descuento">Descuento</a>
 		</span>
 		| 
 		<span th:switch="${orden}" class="orden_publicaciones"> 
 		  <span th:case="'m2'" class="orden_publicaciones_seleccionado">M2</span> 
-		  <a th:case="*" href="/?orden=m2">M2</a>
+		  <a th:case="*" href="#" onclick="goto(this)" href-data="orden=m2">M2</a>
 		</span>
 		| 
 		<span th:switch="${orden}" class="orden_publicaciones"> 
 		  <span th:case="'ambientes'" class="orden_publicaciones_seleccionado">Ambientes</span> 
-		  <a th:case="*" href="/?orden=ambientes">Ambientes</a>
+		  <a th:case="*" href="#" onclick="goto(this)" href-data="orden=ambientes">Ambientes</a>
 		</span>
 		]
 		
@@ -505,7 +505,57 @@ body {font-family: Arial, Helvetica, sans-serif;}
 	
 	}(this);
 	
-
+	function goto(thiz){
+		var query = thiz.getAttributeNode('href-data').value;
+		window.location.href = buildURL(query);
+	}
+	
+	function buildURL(q){
+		var arr = q.split('=');
+		return remplazar(arr);
+	}
+	
+	function remplazar(q){
+		var from = location.href.indexOf('?');
+		if(from != -1){
+			var params = location.href.substr(from+1);
+			var arr = params.split('&');
+			var qp = '';
+			var existe = existeParametro(q[0]);
+			if(!existe){
+				qp+='&'+q[0]+'='+q[1];
+			}
+			for (i = 0; i < arr.length; i++) {
+				var s = arr[i].split('=');
+				if(s[0] == q[0]){
+					 qp+='&'+s[0]+'='+q[1];
+				}else{
+					qp+='&'+arr[i];
+				}
+			}				
+			return location.origin + '?' + qp.substr(1);
+		}else{
+			return location.origin + '?' + q[0]+'='+q[1];
+		}
+	}	
+	
+	function existeParametro(key){
+		var from = location.href.indexOf('?');
+		var params = location.href.substr(from+1);
+		var arr = params.split('&');
+		for (i = 0; i < arr.length; i++) {
+			var s = arr[i].split('=');
+			if(s[0] == key){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	function contiene(name) {
+		return location.href.search(name) != -1;
+	}
+	
 </script>
 
 </body>

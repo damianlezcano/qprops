@@ -29,7 +29,10 @@ public class PublicacionController {
 	private BateriaService bateriaService;
 	
 	@RequestMapping("/")
-	public String index(@RequestParam(required = false, value = "orden",  defaultValue = "fechaRegistracion") String orden, Model modelo) {
+	public String index(Model modelo,
+			@RequestParam(required = false, value = "orden", defaultValue = "fechaRegistracion") String orden,
+			@RequestParam(required = false, value = "tipoBusqueda") String tipoBusqueda
+		) {
 		
 		List<Publicacion> publicaciones = service.findAll();
 		
@@ -39,24 +42,33 @@ public class PublicacionController {
 		List<Publicacion> descartados = new ArrayList<Publicacion>();
 		
 		for (Publicacion publicacion : publicaciones) {
-			if(publicacion.getEstado().getTipo() == null || (publicacion.getEstado().getTipo() != null && "nuevo".equalsIgnoreCase(publicacion.getEstado().getTipo()))) {
-				nuevos.add(publicacion);
-			}else if("enproceso".equalsIgnoreCase(publicacion.getEstado().getTipo())) {
-				enprocesos.add(publicacion);
-			}else if("candidato".equalsIgnoreCase(publicacion.getEstado().getTipo())) {
-				candidatos.add(publicacion);
-			}else if("descartado".equalsIgnoreCase(publicacion.getEstado().getTipo()) || "descartadoDesdeEnProceso".equalsIgnoreCase(publicacion.getEstado().getTipo()) || "descartadoDesdeCandidato".equalsIgnoreCase(publicacion.getEstado().getTipo())) {
-				descartados.add(publicacion);
+			
+			boolean agregar = true;
+			//filtro por tipoBusqueda
+			if(tipoBusqueda != null){
+				agregar = publicacion.getPaginaParser().getDescripcion().equals(tipoBusqueda);
+			}
+			
+			if(agregar) {
+				if(publicacion.getEstado().getTipo() == null || (publicacion.getEstado().getTipo() != null && "nuevo".equalsIgnoreCase(publicacion.getEstado().getTipo()))) {
+					nuevos.add(publicacion);
+				}else if("enproceso".equalsIgnoreCase(publicacion.getEstado().getTipo())) {
+					enprocesos.add(publicacion);
+				}else if("candidato".equalsIgnoreCase(publicacion.getEstado().getTipo())) {
+					candidatos.add(publicacion);
+				}else if("descartado".equalsIgnoreCase(publicacion.getEstado().getTipo()) || "descartadoDesdeEnProceso".equalsIgnoreCase(publicacion.getEstado().getTipo()) || "descartadoDesdeCandidato".equalsIgnoreCase(publicacion.getEstado().getTipo())) {
+					descartados.add(publicacion);
+				}
 			}
 		}
-		
-		modelo.addAttribute("orden", orden);
 				
 		modelo.addAttribute("nuevos", sort(nuevos,orden));
 		modelo.addAttribute("enprocesos", sort(enprocesos,orden));
 		modelo.addAttribute("candidatos", sort(candidatos,orden));
 		modelo.addAttribute("descartados", sort(descartados,orden));
-		
+		//orden registros
+		modelo.addAttribute("orden", orden);
+		//estado bateria
 		int bateria = bateriaService.estado();
 		modelo.addAttribute("bateria",bateria);
 		
